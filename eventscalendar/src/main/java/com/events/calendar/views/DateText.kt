@@ -181,60 +181,6 @@ class DateText : View {
     override fun onDraw(canvas: Canvas) {
         val location = IntArray(2)
         this.getLocationOnScreen(location)
-        if (isPast) {
-            mDateTextPaint.color = disabledTextColor
-            canvas.drawText("" + mDate.get(Calendar.DATE), mDateTextX.toFloat(), mDateTextY, mDateTextPaint)
-        } else {
-            if (isCurrentMonth && !isDisabled) {
-                if (isToday) canvas.drawCircle(mCircleX.toFloat(), mCircleY.toFloat(), mTodayCircleRadius, mTodayPaint)
-                when (EventsCalendarUtil.SELECTION_MODE) {
-                    EventsCalendarUtil.SINGLE_SELECTION -> {
-                        if (isSelected) {
-                            mDateTextPaint.color = selectedTextColor
-                            canvas.drawCircle(mCircleX.toFloat(), mCircleY.toFloat(), mBgCircleRadius, mSelectionPaint)
-                        } else mDateTextPaint.color = defaultTextColor
-                    }
-                    EventsCalendarUtil.RANGE_SELECTION -> {
-                        when {
-                            EventsCalendarUtil.datesInSelectedRange.contains(EventsCalendarUtil.getDateString(mDate, EventsCalendarUtil.DD_MM_YYYY)) -> when {
-                                EventsCalendarUtil.datesInSelectedRange.keys.indexOf(EventsCalendarUtil.getDateString(mDate, EventsCalendarUtil.DD_MM_YYYY)) == 0 -> {
-                                    mDateTextPaint.color = selectedTextColor
-                                    canvas.drawCircle(mCircleX.toFloat(), mCircleY.toFloat(), mFullCircleRadius, mRangeSelectionStartPaint)
-                                    canvas.drawRect(RectF((mWidth / 2).toFloat(), 0f, mWidth.toFloat(), mHeight.toFloat()), mRangeSelectionStartPaint)
-                                }
-                                EventsCalendarUtil.datesInSelectedRange.keys.indexOf(EventsCalendarUtil.getDateString(mDate, EventsCalendarUtil.DD_MM_YYYY)) == EventsCalendarUtil.datesInSelectedRange.size - 1 -> {
-                                    mDateTextPaint.color = selectedTextColor
-                                    canvas.drawCircle(mCircleX.toFloat(), mCircleY.toFloat(), mFullCircleRadius, mRangeSelectionEndPaint)
-                                    canvas.drawRect(RectF(0f, 0f, (mWidth / 2).toFloat(), mHeight.toFloat()), mRangeSelectionEndPaint)
-                                }
-                                else -> {
-                                    mDateTextPaint.color = selectedTextColor
-                                    canvas.drawColor(mRangeSelectionPaint.color)
-                                }
-                            }
-                            isSelected -> {
-                                mDateTextPaint.color = selectedTextColor
-                                canvas.drawCircle(mCircleX.toFloat(), mCircleY.toFloat(), mBgCircleRadius, mSelectionPaint)
-                            }
-                            else -> mDateTextPaint.color = defaultTextColor
-                        }
-                    }
-                    EventsCalendarUtil.MULTIPLE_SELECTION -> {
-                        if (EventsCalendarUtil.datesInSelectedRange.contains(EventsCalendarUtil.getDateString(mDate, EventsCalendarUtil.DD_MM_YYYY)) && !isDisabled) {
-                            mDateTextPaint.color = selectedTextColor
-                            canvas.drawCircle(mCircleX.toFloat(), mCircleY.toFloat(), mBgCircleRadius, mSelectionPaint)
-                        } else mDateTextPaint.color = defaultTextColor
-                    }
-                }
-                if (!isDisabled && EventsCalendarUtil.datesInSelectedRange.contains(EventsCalendarUtil.getDateString(mDate, EventsCalendarUtil.DD_MM_YYYY))) {
-                    mDateTextPaint.isFakeBoldText = EventsCalendarUtil.isBoldTextOnSelectionEnabled
-                } else mDateTextPaint.isFakeBoldText = false
-                canvas.drawText("" + mDate.get(Calendar.DATE), mDateTextX.toFloat(), mDateTextY, mDateTextPaint)
-            } else {
-                mDateTextPaint.color = disabledTextColor
-                canvas.drawText("" + mDate.get(Calendar.DATE), mDateTextX.toFloat(), mDateTextY, mDateTextPaint)
-            }
-        }
         super.onDraw(canvas)
         if (hasEvent) drawDot(canvas)
     }
